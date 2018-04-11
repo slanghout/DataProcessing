@@ -17,40 +17,54 @@ OUTPUT_CSV = 'tvseries.csv'
 
 
 def extract_tvseries(dom):
-    """
-    Extract a list of highest rated TV series from DOM (of IMDB page).
-    Each TV series entry should contain the following fields:
-    - TV Title
-    - Rating
-    - Genres (comma separated if more than one)
-    - Actors/actresses (comma separated if more than one)
-    - Runtime (only a number!)
-    """
+    
+    # Extract a list of highest rated TV series from DOM (of IMDB page).
+    # Each TV series entry should contain the following fields:
+    # - TV Title
+    # - Rating
+    # - Genres (comma separated if more than one)
+    # - Actors/actresses (comma separated if more than one)
+    # - Runtime (only a number!)
+    
+    # find all serie classes
+    series = dom.find_all('div', class_ = 'lister-item mode-advanced')
+    
+    tvseries = []
 
-    # ADD YOUR CODE HERE TO EXTRACT THE ABOVE INFORMATION ABOUT THE
-    # HIGHEST RATED TV-SERIES
-    # NOTE: FOR THIS EXERCISE YOU ARE ALLOWED (BUT NOT REQUIRED) TO IGNORE
-    # UNICODE CHARACTERS AND SIMPLY LEAVE THEM OUT OF THE OUTPUT.
+    # iterate over the series found and add information to list per show
+    for serie in series:
+        singleshow = []
+        
+        # select elements of the series and add to list
+        serie_name = serie.h3.a.string
+        singleshow.append(serie_name)
+        serie_rating = serie.strong.text
+        singleshow.append(serie_rating)
+        serie_genre = serie.find('span', class_ = 'genre').string
+        serie_genre = serie_genre.strip()
+        singleshow.append(serie_genre)
+        actors = serie.select('p > a')
+        serie_actors = []
+        for actor in actors: 
+            serie_actors.append(actor.find(text = True))
+        serie_actors = ",".join(serie_actors)
+        singleshow.append(serie_actors)
+        serie_runtime = serie.find('span', class_ = 'runtime').text 
+        serie_runtime = serie_runtime.strip("min")
+        singleshow.append(serie_runtime)
+        tvseries.append(singleshow)
 
-    return []   # REPLACE THIS LINE AS WELL AS APPROPRIATE
-
+    return tvseries
 
 def save_csv(outfile, tvseries):
-    """
-    Output a CSV file containing highest rated TV-series.
-    """
+    
+    # Output a CSV file containing highest rated TV-series.
     writer = csv.writer(outfile)
     writer.writerow(['Title', 'Rating', 'Genre', 'Actors', 'Runtime'])
 
-    
-    print(dom.findAll(class_= "certificate"))
-    for item in dom.findAll("div", {"class" : "lister-content"}):
-        writer.writerow([dom.findAll("span", {"class": "certificate"}), dom.findAll("span", {"class": "runtime"}), dom.findAll("span", {"class": "genre"})])
-
-
-
-
-    # ADD SOME CODE OF YOURSELF HERE TO WRITE THE TV-SERIES TO DISK
+    # write the lists made above into the csv file
+    for serie in tvseries:
+        writer.writerow(serie)
 
 
 def simple_get(url):
@@ -92,7 +106,6 @@ if __name__ == "__main__":
 
     # parse the HTML file into a DOM representation
     dom = BeautifulSoup(html, 'html.parser')
-    # print(dom.prettify())
 
     # extract the tv series (using the function you implemented)
     tvseries = extract_tvseries(dom)
