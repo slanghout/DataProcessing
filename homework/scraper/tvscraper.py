@@ -38,20 +38,25 @@ def extract_tvseries(dom):
         # select elements of the series and add to list
         serie_name = serie.h3.a.string
         singleshow.append(serie_name)
+        
         serie_rating = serie.strong.text
         singleshow.append(serie_rating)
+        
         serie_genre = serie.find('span', class_ = 'genre').string
         serie_genre = serie_genre.strip()
         singleshow.append(serie_genre)
+        
         actors = serie.select('p > a')
         serie_actors = []
         for actor in actors: 
             serie_actors.append(actor.find(text = True))
         serie_actors = ",".join(serie_actors)
         singleshow.append(serie_actors)
+        
         serie_runtime = serie.find('span', class_ = 'runtime').text 
         serie_runtime = serie_runtime.strip("min")
         singleshow.append(serie_runtime)
+        
         tvseries.append(singleshow)
 
     return tvseries
