@@ -1,3 +1,10 @@
+# Sylvie Langhout
+# 10792368
+# 
+# Program to make a JSON file from a CSV file
+# Usage: enter the fieldnames in this file
+# run by typing : python convertCSV2JSON.py filename.cvs
+
 import csv
 import json
 import sys
