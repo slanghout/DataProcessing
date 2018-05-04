@@ -3,3 +3,8 @@
  
 Scatter.css
 File with the style functions for D3 Scatterplot*/
+
+
+body{
+	font-family: sans-serif;
+}
