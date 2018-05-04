@@ -132,20 +132,14 @@ function MakeScatter(error, response) {
 var select = d3.select('body')
   .append('select')
   .attr('class','select')
-  .attr("value", function(d, i){return (i)})
-  .on('change', changeyear)
+  // .attr("value", function(d, i){return (i)})
 
 // create text in dropdown menu
 var options = select
   .selectAll('option')
   .data(year_list).enter()
   .append('option')
-  .text(function (d) { return d; });
-
-function changeyear() {
-  selectValue = d3.select('select').property('value')
-  return 
-};
+  .text(function (d) { return d; })
 
   // create svg of width and height
   var svg = d3.select("body")
