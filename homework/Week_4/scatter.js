@@ -10,10 +10,10 @@ window.onload = function() {
 };
 
 // load min wage per year
-var minimum_wage = "http://stats.oecd.org/SDMX-JSON/data/RMW/AUS+BEL+CAN+CHL+CZE+EST+FRA+GRC+HUN+IRL+ISR+JPN+KOR+LVA+LUX+MEX+NLD+NZL+POL+PRT+SVK+SVN+ESP+GBR+USA+LTU.EXR.A/all?startTime=2000&endTime=2016&dimensionAtObservation=allDimensions"
+var minimum_wage = "https://stats.oecd.org/SDMX-JSON/data/RMW/AUS+BEL+CAN+CHL+CZE+EST+FRA+GRC+HUN+IRL+ISR+JPN+KOR+LVA+LUX+MEX+NLD+NZL+POL+PRT+SVK+SVN+ESP+GBR+USA+LTU.EXR.A/all?startTime=2000&endTime=2016&dimensionAtObservation=allDimensions"
 
 // load average wage per year
-var average_wage = "http://stats.oecd.org/SDMX-JSON/data/AV_AN_WAGE/AUS+BEL+CAN+CHL+CZE+EST+FRA+GRC+HUN+IRL+ISR+JPN+KOR+LVA+LUX+MEX+NLD+NZL+POL+PRT+SVK+SVN+ESP+GBR+USA+LTU.USDEX/all?startTime=2000&endTime=2016&dimensionAtObservation=allDimensions"
+var average_wage = "https://stats.oecd.org/SDMX-JSON/data/AV_AN_WAGE/AUS+BEL+CAN+CHL+CZE+EST+FRA+GRC+HUN+IRL+ISR+JPN+KOR+LVA+LUX+MEX+NLD+NZL+POL+PRT+SVK+SVN+ESP+GBR+USA+LTU.USDEX/all?startTime=2000&endTime=2016&dimensionAtObservation=allDimensions"
 // set two datasets in queue
 d3.queue()
   .defer(d3.request, minimum_wage)
