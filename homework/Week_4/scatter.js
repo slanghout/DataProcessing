@@ -126,9 +126,7 @@ function MakeScatter(error, response) {
 
   // Create undertitle with description
   d3.select("body").append("h5")
-    .text("Scatterplot displaying the average wage against
-        the minimal wage of various countries in US dollar rates. 
-        Source: https://stats.oecd.org ")
+    .text("Scatterplot displaying the average wage against the minimal wage of various countries in US dollar rates. Source: https://stats.oecd.org ")
 
 // create drop down menu
 var select = d3.select('body')
