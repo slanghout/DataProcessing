@@ -44,7 +44,8 @@ function MakeScatter(error, response) {
   	// loop over years and add data to array for every year
   	for(time = 0; time < NR_YEARS; time ++)
   	{
-  		var money = (data_minimum["dataSets"]["0"]["observations"][country + ":" + time + ":0:0"][0])
+  		var money = (data_minimum["dataSets"]["0"]["observations"][country + ":" +
+        time + ":0:0"][0])
   		this_country.push(money)
   	}
   	minimum_per_country.push(this_country)
@@ -58,7 +59,8 @@ function MakeScatter(error, response) {
   	// loop over years and add data to array for every year
   	for(time = 0; time < NR_YEARS; time ++)
   	{
-  		var money = (data_average["dataSets"]["0"]["observations"][country + ":" + time + ":0"][0])
+  		var money = (data_average["dataSets"]["0"]["observations"][country + ":" +
+        time + ":0"][0])
   		this_country.push(money)
   	}
   	average_per_country.push(this_country)
@@ -75,7 +77,8 @@ function MakeScatter(error, response) {
     // add every point to seperate list per country
     for (per_country = 0; per_country < NR_COUNTRIES; per_country++)
     {
-      var country_stats = [average_per_country[per_country][per_year], minimum_per_country[per_country][per_year]]
+      var country_stats = [average_per_country[per_country][per_year],
+      minimum_per_country[per_country][per_year]]
 	  	years.push(country_stats)
     }
 	pay_per_year.push(years)
@@ -118,8 +121,14 @@ function MakeScatter(error, response) {
     .text("Scatterplot of annual wage against minimum wage")
 
   // Create undertitle with name and Student number
-  d3.select("body").append("h5")
+  d3.select("body").append("h3")
     .text("Sylvie Langhout - 10792368")
+
+  // Create undertitle with description
+  d3.select("body").append("h5")
+    .text("Scatterplot displaying the average wage against
+        the minimal wage of various countries in US dollar rates. 
+        Source: https://stats.oecd.org ")
 
 // create drop down menu
 var select = d3.select('body')
@@ -200,7 +209,8 @@ function changeyear() {
     .data(country_list)
     .enter().append("g")
     .attr("class", "legend")
-    .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+    .attr("transform", function(d, i) { return "translate(0,"
+       + i * 20 + ")"; });
 
   // append colored squares for legend
   legend.append("rect")
