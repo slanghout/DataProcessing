@@ -1,8 +1,11 @@
 body{
 	font-family: sans-serif;
 }
+.states{
+	fill: grey;
+}
 .states :hover {
-  fill: red;
+  fill: lightblue;
 }
 
 .state-borders {
@@ -13,3 +16,14 @@ body{
   stroke-linecap: round;
   pointer-events: none;
 }
+  div.tooltip { 
+          position: absolute;     
+          text-align: center;     
+          width: 80px;          
+          height: 14px;         
+          padding: 2px;       
+          font: 12px sans-serif;    
+          background: #fff; 
+          border: 0px;        
+          pointer-events: none;     
+      }
