@@ -128,16 +128,20 @@ svg.selectAll('path')
     .on('click',function(d) {
     	svg.selectAll("rect").remove()
     	svg.selectAll("text").remove()
-    	// create Scale for x-axis
+    	console.log(dataset[parseInt(d.id)])
+    	console.log(parseInt(d.id))
+    	console.log(d3.max(dataset))
+    	  // create Scale for x-axis
 		  var xScale = d3.scaleLinear()
-		   .domain([d3.min(dataset[parseInt(d.id)]), function(d) {return d;}, d3.max(dataset[parseInt(d.id)]), function(d) {return d;}])
-		   .range([100, 300]);
+		   .domain([0, 3])
+		   .range([150, 300]);
 
 		  // create scale for y-axis 
 		  var yScale = d3.scaleLinear()
-		    .domain([0, d3.max((dataset[parseInt(d.id)]), function(d) {return d;})])
-		    .range([600, 800]);
+		    .domain([0, 3000])
+		    .range([900, 600])
     	
+    	// create title with state name
     	svg.selectAll("text")
 			.data(dataset[parseInt(d.id)])
 		   	.enter()
@@ -145,18 +149,49 @@ svg.selectAll('path')
 		   	.text(state_names[parseInt(d.id)])
 		   	.attr("x", 200)
 		   	.attr("y", 600)
+
+		 // create x-axis text restaurants
+		 svg.append('text')
+		    .attr('x', 200)
+		    .attr('y', 950)
+		    .attr('text-anchor', 'end')
+		    .attr('class', 'label')
+		    .text('Restaurants');
+		  
+		  // create x-axis text hotels
+		  svg.append('text')
+		    .attr('x', 250)
+		    .attr('y', 950)
+		    .attr('text-anchor', 'end')
+		    .attr('class', 'label')
+		    .text('Hotels');
+
+		// create bars
 		svg.selectAll("rect")
 			.data(dataset[parseInt(d.id)])
 		   	.enter()
 		   	.append("rect")
-		   	.attr("x", function(d, i) {return 50 +(i *100)})
-		   	.attr('y', 600)
+		   	.attr("x",function(d,i) {return xScale(i); })
+   			.attr("y",function(d) { return yScale(d); })
 		   	.attr("width", 10)
-		   	.attr("height", function(d) {return d})
+		   	.attr("height", function(d) {return 900 - yScale(d)})
 		   	.attr("fill", function(d) {
         		return "pink";
         	})
-        	// console.log(data)
+        	
+         // create x-axis
+		  svg.append('g')
+		    .attr('transform', 'translate(0, 900)')
+		    .attr('class', 'x axis')
+		    .call(d3.axisTop(xScale).ticks(0))
+		    .selectAll("text").remove()
+		    // .ticks(0)
+		
+		// creaye y-axis
+		  svg.append('g')
+		    .attr('transform', 'translate(150,0)')
+		    .attr('class', 'y axis')
+		    .call(d3.axisLeft(yScale).ticks(4));
         
     })
 
