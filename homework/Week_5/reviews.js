@@ -39,7 +39,7 @@ function MakeMap(error, restaurant_reviews, hotel_reviews, states_nr) {
 
   // Create undertitle with description
   d3.select("body").append("h5")
-    .text("Click on a state and different hotels and restaurants for the state will be displayed")
+    .text("Click on a state and the number of star rated hotels and restaurants rated by Tripadvisor for the state will be displayed. Sources: https://www.kaggle.com/PromptCloudHQ/restaurants-on-tripadvisor and https://www.kaggle.com/datafiniti/hotel-reviews/data")
 
   w = 1000
   h = 1000
