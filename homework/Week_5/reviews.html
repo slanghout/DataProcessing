@@ -10,9 +10,8 @@ HTML code for the D3 Map with charts
     <head>
         <div id="tooltip"></div>
         <script src="https://d3js.org/d3.v4.min.js"></script>
-        <!-- <script src="http://d3js.org/queue.v1.min.js"></script> -->
+        <script src="js/bootstrap.js"></script>
         <script src="https://d3js.org/topojson.v2.min.js"></script>
-        <!-- <script src="uStates.js"></script> -->
         <script src="reviews.js"></script>
     	<title>
     		Assignment Week 5 + 6
@@ -20,5 +19,37 @@ HTML code for the D3 Map with charts
         <link rel="stylesheet" href="reviews.css" type="text/css">
     </head>
     <body>
+        <h1>
+            Restaurant and Hotels in different states
+        </h1>
+        <button class="accordion">Student Information</button>
+            <div class="panel">
+                Sylvie Langhout - 10792368
+            </div>
+        <button class="accordion">Map information</button>
+            <div class="panel">
+                 <p>Below a map of the United States of America is displayed. After opening this page the information for a random state will be displayed. If you click on one of the states, the number of tripadvisor restaurants and hotels in the states are shown in a graph, below the map of the USA. If you want to see this data for yourself click on one of the links below to see where the data came from. Click on a state and the number of star rated hotels and restaurants rated by Tripadvisor for the state will be displayed. Sources: https://www.kaggle.com/PromptCloudHQ/restaurants-on-tripadvisor and https://www.kaggle.com/datafiniti/hotel-reviews/data</p>
+            </div>
 
+        <div class="btn-group btn-group-justified">
+            <br><a href="https://www.kaggle.com/PromptCloudHQ/restaurants-on-tripadvisor" class="btn success">Restaurant data</a>
+            <a href="https://www.kaggle.com/datafiniti/hotel-reviews/data" class="btn success">Hotel data</a>
+            <a href="https://www.kff.org/other/state-indicator/distribution-by-citizenship-status/?dataView=1&currentTimeframe=0&selectedDistributions=citizen&sortModel=%7B%22colId%22:%22Location%22,%22sort%22:%22asc%22%7D" class="btn success">Citizen data</a><br>
+</div>
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = "block";
+        }
+    });
+}
+</script>
     </body>

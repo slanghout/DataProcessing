@@ -1,11 +1,43 @@
 body{
 	font-family: sans-serif;
 }
+
+.btn {
+    border: none; /* Remove borders */
+    color: white; /* Add a text color */
+    padding: 14px 28px; /* Add some padding */
+    cursor: pointer; /* Add a pointer cursor on mouse-over */
+}
+
+.success {background-color: #4CAF50;} /* Green */
+.success:hover {background-color: #46a049;}
+
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+.active, .accordion:hover {
+    background-color: #ccc; 
+}
+
+.panel {
+    padding: 0.18px;
+    display: none;
+    background-color: white;
+    overflow: hidden;
+}
 .states{
-	fill: grey;
+	fill: lightblue;
 }
 .states :hover {
-  fill: lightblue;
+  fill: grey;
 }
 
 .state-borders {

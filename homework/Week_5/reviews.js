@@ -29,18 +29,6 @@ function MakeMap(error, restaurant_reviews, hotel_reviews, states_nr) {
   console.log(american_restaurants)
   console.log(hotel_reviews)
 
-   // Create title of page
-  d3.select("body").append("h1")
-    .text("Restaurant and Hotels in different states")
-
-  // Create undertitle with name and Student number
-  d3.select("body").append("h3")
-    .text("Sylvie Langhout - 10792368")
-
-  // Create undertitle with description
-  d3.select("body").append("h5")
-    .text("Click on a state and the number of star rated hotels and restaurants rated by Tripadvisor for the state will be displayed. Sources: https://www.kaggle.com/PromptCloudHQ/restaurants-on-tripadvisor and https://www.kaggle.com/datafiniti/hotel-reviews/data")
-
   w = 1000
   h = 1000
   var svg = d3.select("body")
@@ -60,23 +48,25 @@ var state_names = ["none", "Alabama", "Alaska", "none", "Arizona", "Arkansas", "
 	"New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", 
 	"North Dakota", "Ohio", "Oklahoma","Oregon", "Pennsylvania", "none", "Rhode Island",
 	"South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
-	"Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
+	"Virginia","none", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
 
 // create an array with all the abbreviations of the states
 var provinces = ["none", "AL", "AK", "none",  "AZ", "AR", "CA", "none", "CO",
 	"CT", "DE", "none", "FL", "GA", "none", "HI", "ID", "IL","IN", "IA", "KS",
 	"KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV",
 	"NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "none",
-	"RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI" ,"WY"]
+	"RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "none", "WA", "WV", "WI" ,"WY"]
 
+var nr_of_states = provinces.length
+var nr_of_restaurants = american_restaurants.length
 var restaurant_per_state = []
 
-for (var state = 0; state < provinces.length; state ++)
+for (var state = 0; state < nr_of_states; state ++)
 {
 	// var restaurant_in_state = []\
 	var restaurant_count = 0
 
-	for (var restaurant = 0; restaurant < american_restaurants.length; restaurant++)
+	for (var restaurant = 0; restaurant < nr_of_restaurants; restaurant++)
 	{
 		if (provinces[state] == american_restaurants[restaurant].State)
 		{
@@ -87,12 +77,13 @@ for (var state = 0; state < provinces.length; state ++)
 }
 
 var hotel_per_state = []
+var nr_of_hotels = hotel_reviews.length
 
-for (var state = 0; state < provinces.length; state ++)
+for (var state = 0; state < nr_of_states; state ++)
 {
 	var hotel_count = 0
 
-	for (var hotel = 0; hotel < hotel_reviews.length; hotel++)
+	for (var hotel = 0; hotel < nr_of_hotels; hotel++)
 	{
 		if (provinces[state] == hotel_reviews[hotel].province)
 		{
@@ -103,12 +94,11 @@ for (var state = 0; state < provinces.length; state ++)
 }
 
 var dataset = []
-for (var state = 0; state < provinces.length; state ++)
+for (var state = 0; state < nr_of_states; state ++)
 {
 	dataset.push([restaurant_per_state[state], hotel_per_state[state]])
 
 }
-console.log(dataset)
 
 d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
   if (error) throw error;
@@ -118,27 +108,109 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
     .selectAll("path")
     .data(topojson.feature(us, us.objects.states).features)
     .enter().append("path")
-      .attr("d", path);
+      .attr("d", path)
 
   svg.append("path")
       .attr("class", "state-borders")
       .attr("d", path(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; })))
+ 
+  
+ var randomcounty = Math.floor(Math.random() * 56)
+ // create Scale for x-axis
+ var xScale = d3.scaleLinear()
+	.domain([0, 3])
+	.range([150, 300]);
 
+if (dataset[parseInt(randomcounty)][0] < dataset[parseInt(randomcounty)][1])
+{
+	yMax = dataset[parseInt(randomcounty)][1]
+}
+else
+{
+	yMax = dataset[parseInt(randomcounty)][0]
+}
+		  	
+// create scale for y-axis 
+var yScale = d3.scaleLinear()
+.domain([0, yMax])
+.range([900, 600])
+
+// create title with state name
+svg.selectAll("text")
+.data(dataset[parseInt(randomcounty)])
+	.enter()
+	.append("text")
+	.text(state_names[parseInt(randomcounty)])
+	.attr("x", 200)
+	.attr("y", 550)
+
+// create x-axis text restaurants
+svg.append('text')
+.attr('x', 200)
+.attr('y', 950)
+.attr('text-anchor', 'end')
+.attr('class', 'label')
+.text('Restaurants');
+
+// create x-axis text hotels
+svg.append('text')
+.attr('x', 250)
+.attr('y', 950)
+.attr('text-anchor', 'end')
+.attr('class', 'label')
+.text('Hotels');
+
+// create bars
+svg.selectAll("rect")
+.data(dataset[parseInt(randomcounty)])
+	.enter()
+	.append("rect")
+	.attr("x",function(d,i) {return xScale(i); })
+	.attr("y",function(d) { return yScale(d); })
+	.attr("width", 40)
+	.attr("height", function(d) {return 900 - yScale(d)})
+	.attr("fill", function(d) {
+	return "pink";
+})
+
+// create x-axis
+svg.append('g')
+.attr('transform', 'translate(0, 900)')
+.attr('class', 'x axis')
+.call(d3.axisTop(xScale).ticks(0))
+.selectAll("text").remove()
+// .ticks(0)
+
+// creaye y-axis
+svg.append('g')
+.attr('transform', 'translate(150,0)')
+.attr('class', 'y axis')
+.call(d3.axisLeft(yScale).ticks(4));
+
+
+// create barchart for map created
 svg.selectAll('path')
     .on('click',function(d) {
     	svg.selectAll("rect").remove()
     	svg.selectAll("text").remove()
-    	console.log(dataset[parseInt(d.id)])
-    	console.log(parseInt(d.id))
-    	console.log(d3.max(dataset))
+
     	  // create Scale for x-axis
 		  var xScale = d3.scaleLinear()
 		   .domain([0, 3])
 		   .range([150, 300]);
 
+		  if (dataset[parseInt(d.id)][0] < dataset[parseInt(d.id)][1])
+		  	{
+		  		yMax = dataset[parseInt(d.id)][1]
+		  	}
+		  else
+		  {
+		  	yMax = dataset[parseInt(d.id)][0]
+		  }
+		  	
 		  // create scale for y-axis 
 		  var yScale = d3.scaleLinear()
-		    .domain([0, 3000])
+		    .domain([0, yMax])
 		    .range([900, 600])
     	
     	// create title with state name
@@ -148,7 +220,7 @@ svg.selectAll('path')
 		   	.append("text")
 		   	.text(state_names[parseInt(d.id)])
 		   	.attr("x", 200)
-		   	.attr("y", 600)
+		   	.attr("y", 550)
 
 		 // create x-axis text restaurants
 		 svg.append('text')
@@ -173,7 +245,7 @@ svg.selectAll('path')
 		   	.append("rect")
 		   	.attr("x",function(d,i) {return xScale(i); })
    			.attr("y",function(d) { return yScale(d); })
-		   	.attr("width", 10)
+		   	.attr("width", 40)
 		   	.attr("height", function(d) {return 900 - yScale(d)})
 		   	.attr("fill", function(d) {
         		return "pink";
@@ -194,7 +266,5 @@ svg.selectAll('path')
 		    .call(d3.axisLeft(yScale).ticks(4));
         
     })
-
-
 });
 }

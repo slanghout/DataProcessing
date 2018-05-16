@@ -26,7 +26,7 @@ else:
 	# set fieldnames
 	# fieldnames = ("Name", "City","State","Country")
 	# fieldnames = ("address","city","country", "name", "province")
-	fieldnames = ("STATE","STUSAB","STATE_NAME","STATENS")
+	fieldnames = ("STATE_NAME","CITIZENS")
 	data = csv.DictReader(csvfile, fieldnames)
 
 	# write the data in the json file
