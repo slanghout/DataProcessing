@@ -9,37 +9,18 @@ window.onload = function() {
   console.log('Yes, you can!')
 };
 
+// load in the needed json files
 d3.queue()
 	.defer(d3.json, 'restaurant_reviews.json')
 	.defer(d3.json, 'hotel_reviews.json')
 	.defer(d3.json, 'states_nr.json')
 	.await(MakeMap);
 
+// create function to make map
 function MakeMap(error, restaurant_reviews, hotel_reviews, states_nr) {
   if (error) throw error;
   
-  var american_restaurants = []
-  for(var restaurant = 0; restaurant < restaurant_reviews.length; restaurant ++)
-  {
-  	if (restaurant_reviews[restaurant].Country == "United States")
-  	{	
-  		american_restaurants.push(restaurant_reviews[restaurant])
-  	}
-  }
-  console.log(american_restaurants)
-  console.log(hotel_reviews)
-
-  w = 1000
-  h = 1000
-  var svg = d3.select("body")
-    .append("svg")
-    .attr("width", w)
-    .attr("height", h);
-
-var svg = d3.select("svg");
-
-var path = d3.geoPath();
-
+// create list of the state names
 var state_names = ["none", "Alabama", "Alaska", "none", "Arizona", "Arkansas", "California",
 	"none", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida",
 	"Georgia", "none", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas",
@@ -57,10 +38,22 @@ var provinces = ["none", "AL", "AK", "none",  "AZ", "AR", "CA", "none", "CO",
 	"NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "none",
 	"RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "none", "WA", "WV", "WI" ,"WY"]
 
+// create list of restaurants in America
+  var american_restaurants = []
+  for(var restaurant = 0; restaurant < restaurant_reviews.length; restaurant ++)
+  {
+  	if (restaurant_reviews[restaurant].Country == "United States")
+  	{	
+  		american_restaurants.push(restaurant_reviews[restaurant])
+  	}
+  }
+
+// set lenght of the number of states and restaurants
 var nr_of_states = provinces.length
 var nr_of_restaurants = american_restaurants.length
 var restaurant_per_state = []
-
+  
+// create list with all the restaurants per state
 for (var state = 0; state < nr_of_states; state ++)
 {
 	// var restaurant_in_state = []\
@@ -76,6 +69,7 @@ for (var state = 0; state < nr_of_states; state ++)
 	restaurant_per_state.push(restaurant_count)
 }
 
+// create list of all the hotels per state
 var hotel_per_state = []
 var nr_of_hotels = hotel_reviews.length
 
@@ -93,13 +87,28 @@ for (var state = 0; state < nr_of_states; state ++)
 	hotel_per_state.push(hotel_count)
 }
 
+// combine hotel and restaurant data into one dataset per state
 var dataset = []
 for (var state = 0; state < nr_of_states; state ++)
 {
 	dataset.push([restaurant_per_state[state], hotel_per_state[state]])
 
 }
+ 
+ // set width and height for svg
+ w = 1000
+ h = 1000
+ 
+// create svg element
+var svg = d3.select("body")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h);
 
+var svg = d3.select("svg");
+
+// create map of the USA
+var path = d3.geoPath();
 d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
   if (error) throw error;
 
@@ -115,12 +124,15 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
       .attr("d", path(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; })))
  
   
+ // select a random state for begin of page
  var randomcounty = Math.floor(Math.random() * 56)
+ 
  // create Scale for x-axis
  var xScale = d3.scaleLinear()
 	.domain([0, 3])
 	.range([150, 300]);
 
+// scale the y to max of the dataset
 if (dataset[parseInt(randomcounty)][0] < dataset[parseInt(randomcounty)][1])
 {
 	yMax = dataset[parseInt(randomcounty)][1]
@@ -188,9 +200,12 @@ svg.append('g')
 .call(d3.axisLeft(yScale).ticks(4));
 
 
-// create barchart for map created
+// when hovering over state update graph
 svg.selectAll('path')
-    .on('click',function(d) {
+    .on('mouseover', update_graph) 
+
+// function to update graph
+function update_graph(d) {
     	svg.selectAll("rect").remove()
     	svg.selectAll("text").remove()
 
@@ -265,6 +280,6 @@ svg.selectAll('path')
 		    .attr('class', 'y axis')
 		    .call(d3.axisLeft(yScale).ticks(4));
         
-    })
+    }
 });
 }
